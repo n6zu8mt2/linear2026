@@ -39,15 +39,59 @@ function draw() {
 
     // 補助線と演算結果の描画
     if (mode === 'sum') {
+        let virtual_f2_tip = p5.Vector.add(f1_base, v2);
+        
+        // F2がF1の始点と異なる場所にある場合、仮想的なF2を薄く表示
+        if (p5.Vector.dist(f2_base, f1_base) > 0.01) {
+            drawArrow(f1_base.x, f1_base.y, virtual_f2_tip.x, virtual_f2_tip.y, 'rgba(33, 150, 243, 0.4)', 2);
+        }
+
         stroke(200); drawingContext.setLineDash([5, 5]);
         let sum_tip = p5.Vector.add(f1_tip, v2);
+        // 平行四辺形の補助線
         line(f1_tip.x*SCALE, -f1_tip.y*SCALE, sum_tip.x*SCALE, -sum_tip.y*SCALE);
-        line(f2_tip.x*SCALE, -f2_tip.y*SCALE, sum_tip.x*SCALE, -sum_tip.y*SCALE);
+        line(virtual_f2_tip.x*SCALE, -virtual_f2_tip.y*SCALE, sum_tip.x*SCALE, -sum_tip.y*SCALE);
         drawingContext.setLineDash([]);
+        
         drawArrow(f1_base.x, f1_base.y, sum_tip.x, sum_tip.y, '#4caf50', 4, "F1+F2");
+        
     } else if (mode === 'diff') {
-        // 差ベクトル F1 - F2 は F2の先端からF1の先端へ向かうベクトル
-        drawArrow(f2_tip.x, f2_tip.y, f1_tip.x, f1_tip.y, '#ff9800', 4, "F1-F2");
+        let virtual_f2_tip = p5.Vector.add(f1_base, v2);
+        
+        // F2がF1の始点と異なる場所にある場合、仮想的なF2を薄く表示
+        if (p5.Vector.dist(f2_base, f1_base) > 0.01) {
+            drawArrow(f1_base.x, f1_base.y, virtual_f2_tip.x, virtual_f2_tip.y, 'rgba(33, 150, 243, 0.4)', 2);
+        }
+
+        // --- ① 先端結び (Tip-to-Tip) の図示 ---
+        drawingContext.setLineDash([4, 4]);
+        drawArrow(virtual_f2_tip.x, virtual_f2_tip.y, f1_tip.x, f1_tip.y, '#ff9800', 2);
+        drawingContext.setLineDash([]);
+        
+        // 先端結びの中点にラベルを配置
+        let mid_x = (virtual_f2_tip.x + f1_tip.x) / 2;
+        let mid_y = (virtual_f2_tip.y + f1_tip.y) / 2;
+        fill('#ff9800'); noStroke(); textSize(12); textStyle(BOLD);
+        text("F1-F2", mid_x * SCALE + 10, -mid_y * SCALE - 10);
+        textStyle(NORMAL);
+
+        // --- ② F1 + (-F2) の平行四辺形の図示 ---
+        let minus_v2 = p5.Vector.mult(v2, -1);
+        let f1_base_minus_f2 = p5.Vector.add(f1_base, minus_v2);
+        let diff_tip = p5.Vector.add(f1_base, p5.Vector.add(v1, minus_v2));
+
+        // -F2 ベクトルの描画
+        drawArrow(f1_base.x, f1_base.y, f1_base_minus_f2.x, f1_base_minus_f2.y, '#90caf9', 3, "-F2");
+
+        // 平行四辺形の補助線
+        stroke(200); drawingContext.setLineDash([5, 5]);
+        line(f1_tip.x * SCALE, -f1_tip.y * SCALE, diff_tip.x * SCALE, -diff_tip.y * SCALE);
+        line(f1_base_minus_f2.x * SCALE, -f1_base_minus_f2.y * SCALE, diff_tip.x * SCALE, -diff_tip.y * SCALE);
+        drawingContext.setLineDash([]);
+
+        // F1 + (-F2) の合力（これが本来の差ベクトル）
+        drawArrow(f1_base.x, f1_base.y, diff_tip.x, diff_tip.y, '#ff5722', 4, "F1-F2");
+
     } else if (mode === 'scalar') {
         let sc_tip = p5.Vector.add(f1_base, p5.Vector.mult(v1, k));
         drawArrow(f1_base.x, f1_base.y, sc_tip.x, sc_tip.y, '#9c27b0', 4, `${k}F1`);
