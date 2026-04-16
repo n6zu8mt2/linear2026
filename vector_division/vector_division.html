@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ベクトルの基底と座標系 | 数学シミュレーター</title>
+    <link rel="stylesheet" href="../common.css">
+    <link rel="stylesheet" href="vector_division.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+    <script>
+        MathJax = {
+          tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$']] },
+          svg: { fontCache: 'global' }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <div class="page-wrapper">
+        <div id="sidebar-placeholder" data-root-path="../"></div>
+        <div class="main-content">
+            <div class="header">
+                <h1>ベクトルの基底と内分・外分</h1>
+                <p>〜 $s\vec{a} + t\vec{b}$ が作る平行四辺形の幾何学 〜</p>
+            </div>
+
+            <div class="back-link">
+                <a href="../index.html">← トップページに戻る</a>
+            </div>
+
+            <main>
+                <section id="explanation">
+                    <h2>内分・外分と線形結合の深い関係 📐</h2>
+                    <p>
+                        任意の点 $\vec{p}$ を2つの基底ベクトル $\vec{a}, \vec{b}$ を用いて <strong>$\vec{p} = s\vec{a} + t\vec{b}$</strong> と表すとき、この $s$ と $t$ はこの斜交座標系における座標の役割を果たします。
+                    </p>
+                    
+                    <div class="theory-card">
+                        <h3>内分・外分の公式を分解してみる</h3>
+                        <p>線分 $AB$ を $m:n$ に内分する点 $\vec{p}$ は、公式より $\vec{p} = \frac{n\vec{a} + m\vec{b}}{m+n}$ となります。これを分解すると：</p>
+                        $$\vec{p} = \left(\frac{n}{m+n}\right)\vec{a} + \left(\frac{m}{m+n}\right)\vec{b}$$
+                        <p>
+                        ここで $s = \frac{n}{m+n}, t = \frac{m}{m+n}$ と置くと、$\vec{p} = s\vec{a} + t\vec{b}$ という線形結合になります。
+                        さらに、このとき $s+t = \frac{n+m}{m+n} = 1$ が常に成り立ちます。
+                        </p>
+                        <p>外分の場合も同様に $s+t=1$ となり、<strong>「係数の和が1になる」という条件が、「2点を通る直線上にある」ことと同値</strong>であることがわかります。</p>
+                    </div>
+                </section>
+
+                <section id="simulation">
+                    <div class="ui-controls">
+                        <div class="control-group">
+                            <label><input type="radio" name="input-mode" value="st" checked> 係数 $s, t$ を指定 (フリー)</label>
+                            <label><input type="radio" name="input-mode" value="internal"> 線分 $AB$ を $m : n$ に内分</label>
+                            <label><input type="radio" name="input-mode" value="external"> 線分 $AB$ を $m : n$ に外分</label>
+                        </div>
+                        
+                        <div class="control-group view-options">
+                            <label><input type="checkbox" id="show-grid" checked> 平行四辺形格子を表示</label>
+                            <label><input type="checkbox" id="show-line" checked> 直線 $AB$ ($s+t=1$) を表示</label>
+                        </div>
+                        
+                        <div id="st-sliders" class="slider-group">
+                            <div class="slider-item">
+                                <label>係数 $s$: <input type="range" id="s-coeff" min="-5" max="5" step="0.1" value="0.5"></label>
+                                <input type="number" id="s-val-input" min="-5" max="5" step="0.1" value="0.5" class="num-input">
+                            </div>
+                            <div class="slider-item">
+                                <label>係数 $t$: <input type="range" id="t-coeff" min="-5" max="5" step="0.1" value="0.5"></label>
+                                <input type="number" id="t-val-input" min="-5" max="5" step="0.1" value="0.5" class="num-input">
+                            </div>
+                        </div>
+
+                        <div id="mn-sliders" class="slider-group" style="display:none;">
+                            <div class="slider-item">
+                                <label>比率 $m$: <input type="range" id="m-ratio" min="1" max="10" step="0.1" value="2"></label>
+                                <span id="m-val">2.0</span>
+                            </div>
+                            <div class="slider-item">
+                                <label>比率 $n$: <input type="range" id="n-ratio" min="1" max="10" step="0.1" value="1"></label>
+                                <span id="n-val">1.0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="simulator-layout">
+                        <div id="canvas-holder"></div>
+                        <div class="data-panel">
+                            <h4>現在のベクトルと位置関係</h4>
+                            
+                            <div class="base-vector-box">
+                                <div style="color:#e91e63;">$\vec{a} = ($ <span id="vec-a-x">120.0</span>, <span id="vec-a-y">-30.0</span> $)$</div>
+                                <div style="color:#2196f3;">$\vec{b} = ($ <span id="vec-b-x">40.0</span>, <span id="vec-b-y">-120.0</span> $)$</div>
+                            </div>
+                            
+                            <div id="formula-internal" class="formula-box internal-box" style="display:none;">
+                                <strong>【内分の係数 $s, t$】</strong>
+                                $$s = \frac{n}{m+n}, \quad t = \frac{m}{m+n}$$
+                            </div>
+                            <div id="formula-external" class="formula-box external-box" style="display:none;">
+                                <strong>【外分の係数 $s, t$】</strong>
+                                $$s = \frac{-n}{m-n}, \quad t = \frac{m}{m-n}$$
+                            </div>
+
+                            <p style="font-family: serif; font-style: italic; margin-top:10px;">$\vec{p} = s\vec{a} + t\vec{b}$</p>
+                            <div class="result-box">
+                                $s =$ <span id="s-val-display" class="num-val">0.50</span>, 
+                                $t =$ <span id="t-val-display" class="num-val">0.50</span>
+                            </div>
+                            <div class="sum-badge">
+                                $s + t =$ <span id="sum-val-display" class="num-val">1.00</span>
+                            </div>
+                            
+                            <div id="p-coord" class="coord-box">
+                                $P( \dots, \dots )$
+                            </div>
+                            <p class="guide">先端（●）をドラッグして基底ベクトル $\vec{a}, \vec{b}$ を変形できます。<br>背景をドラッグで画面を移動できます。</p>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+    <script src="vector_division.js"></script>
+    <script src="../sidebar.js"></script>
+</body>
+</html>

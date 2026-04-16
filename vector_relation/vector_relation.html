@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>等しいベクトルと逆ベクトル | 数学シミュレーター</title>
+    <link rel="stylesheet" href="../common.css">
+    <link rel="stylesheet" href="vector_relation.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+    <script>
+        MathJax = {
+          tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$']] },
+          svg: { fontCache: 'global' }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <div class="page-wrapper">
+        <div id="sidebar-placeholder" data-root-path="../"></div>
+        <div class="main-content">
+            <div class="header">
+                <h1>ベクトルの関係性</h1>
+                <p>〜 等しいベクトル・逆ベクトル・平行 〜</p>
+            </div>
+
+            <div class="back-link">
+                <a href="../index.html">← トップページに戻る</a>
+            </div>
+
+            <main>
+                <section id="explanation">
+                    <h2>ベクトルは「どこにあるか」を気にしない 📐</h2>
+                    <p>
+                        図形における矢印でベクトルを考えるとき、最も重要なルールのひとつが<strong>「平行移動して重なるベクトルは、すべて同じベクトルとみなす」</strong>ということです。
+                    </p>
+                    
+                    <div class="theory-card">
+                        <h3>ベクトルの基本的な関係</h3>
+                        <ul>
+                            <li><strong>等しいベクトル ($\boldsymbol{a} = \boldsymbol{b}$)</strong>：<br>大きさと向きが完全に同じベクトル。始点の位置が違っていても等しいとみなします。</li>
+                            <li><strong>逆ベクトル ($\boldsymbol{a} = -\boldsymbol{b}$)</strong>：<br>大きさは同じで、向きが正反対（180度逆）のベクトル。各成分の符号が逆になります。</li>
+                            <li><strong>平行なベクトル ($\boldsymbol{a} // \boldsymbol{b}$)</strong>：<br>向きが同じ、または正反対のベクトル。大きさが違っても平行です（$\boldsymbol{a} = k\boldsymbol{b}$ と表せます）。</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section id="simulation">
+                    <div class="ui-controls">
+                        <div class="control-group">
+                            <label><input type="checkbox" id="snap-grid" checked> 各ベクトルの<strong>始点（○）</strong>・<strong>終点（●）</strong>・<strong>矢印本体</strong>をドラッグして動かしてみましょう。</label>
+                        </div>
+                    </div>
+
+                    <div class="simulator-layout">
+                        <div id="canvas-holder"></div>
+                        
+                        <div class="data-panel">
+                            <h4>各ベクトルの成分</h4>
+                            <div class="vector-list">
+                                <div id="info-a" class="vec-info" style="border-left-color: #e91e63;">$\boldsymbol{a} = ( \dots, \dots )$</div>
+                                <div id="info-b" class="vec-info" style="border-left-color: #2196f3;">$\boldsymbol{b} = ( \dots, \dots )$</div>
+                                <div id="info-c" class="vec-info" style="border-left-color: #4caf50;">$\boldsymbol{c} = ( \dots, \dots )$</div>
+                                <div id="info-d" class="vec-info" style="border-left-color: #ff9800;">$\boldsymbol{d} = ( \dots, \dots )$</div>
+                            </div>
+
+                            <h4>自動判定結果</h4>
+                            <div class="relation-box">
+                                <div class="relation-title">✨ 等しいベクトル</div>
+                                <div id="rel-equal" class="relation-result">-</div>
+                                
+                                <div class="relation-title">🔄 逆ベクトル</div>
+                                <div id="rel-inverse" class="relation-result">-</div>
+                                
+                                <div class="relation-title">⏸️ 平行なベクトル</div>
+                                <div id="rel-parallel" class="relation-result">-</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+    <script src="vector_relation.js"></script>
+    <script src="../sidebar.js"></script>
+</body>
+</html>

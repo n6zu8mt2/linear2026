@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>力のベクトル：応用編 | 物理数学シミュレーター</title>
+    <link rel="stylesheet" href="../common.css">
+    <link rel="stylesheet" href="force_vector.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+    <script>
+        MathJax = {
+          tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$']] },
+          svg: { fontCache: 'global' }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        /* 追加の説明ボックス用スタイル */
+        .description-box {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            border-top: 4px solid #0d47a1;
+            margin-top: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .description-box h3 {
+            color: #1565c0;
+            font-size: 1.2em;
+            margin-top: 1.5em;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+        }
+        .description-box h3:first-child {
+            margin-top: 0;
+        }
+        .description-box ul {
+            margin-top: 10px;
+            padding-left: 25px;
+        }
+        .description-box li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-wrapper">
+        <div id="sidebar-placeholder" data-root-path="../"></div>
+        <div class="main-content">
+            <div class="header">
+                <h1>力のベクトルと演算</h1>
+                <p>〜和・差・スカラー倍と物体の運動イメージ〜</p>
+            </div>
+
+            <div class="back-link">
+                <a href="../index.html">← トップページに戻る</a>
+            </div>
+
+            <main>
+                <section id="explanation">
+                    <h2>物理現象を読み解くベクトルの演算 📐</h2>
+                    <p>
+                        物理学において、力や速度などのベクトルを足したり引いたりする数学的な操作は、単なる計算ではなく<strong>「現実世界の現象」</strong>そのものを表しています。
+                    </p>
+                    
+                    <div class="description-box">
+                        <h3>1. 力の合成（和）: $\vec{F}_1 + \vec{F}_2$</h3>
+                        <p>
+                            物体に複数の力が同時に働くとき、それらを足し合わせた<strong>「合力（ごうりょく）」</strong>が物体の実際の動きを決定します。図形的には平行四辺形の対角線として描かれ、成分表示では $(x_1+x_2, y_1+y_2)$ のように各成分を足し算します。
+                        </p>
+                        
+                        <h3>2. 力の差（引き算）: $\vec{F}_1 - \vec{F}_2$</h3>
+                        <p>
+                            ベクトルの引き算は<strong>「力の変化量」や「相対的な力」</strong>を表します。<br>
+                            たとえば、「現在の力 $\vec{F}_2$ を、理想の力 $\vec{F}_1$ に変えるには、あとどれくらいの追加の力が必要か？」を考えるとき、その答えが $\vec{F}_1 - \vec{F}_2$ となります。図では <strong>$\vec{F}_2$ の先端から $\vec{F}_1$ の先端へ向かう矢印</strong> になります。
+                        </p>
+
+                        <h3>3. スカラー倍: $k \vec{F}$</h3>
+                        <p>
+                            ベクトルの「向き」の直線を保ったまま、力を $k$ 倍（実数倍）にする操作です。
+                        </p>
+                        <ul>
+                            <li><strong>$k > 1$ のとき:</strong> 力が増幅される（同じ向きにより強く引っ張る）</li>
+                            <li><strong>$0 < k < 1$ のとき:</strong> 力が減衰する（同じ向きだが弱くなる）</li>
+                            <li><strong>$k < 0$ のとき:</strong> 向きが<strong>180度反転（真逆）</strong>になる（ブレーキや、壁から受ける「反作用」などの表現）</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section id="simulation">
+                    <div class="control-panel-top" style="margin-top: 30px; margin-bottom: 15px;">
+                        <div class="mode-selector" style="font-size: 1.1em; font-weight: bold;">
+                            <label><input type="radio" name="mode" value="sum" checked> 合力 (F1 + F2)</label>
+                            <label style="margin-left: 15px;"><input type="radio" name="mode" value="diff"> 差 (F1 - F2)</label>
+                            <label style="margin-left: 15px;"><input type="radio" name="mode" value="scalar"> スカラー倍 (k × F1)</label>
+                        </div>
+                        <div id="scalar-control" style="display:none; margin-left: 20px; font-weight: bold; background: #e3f2fd; padding: 5px 15px; border-radius: 5px;">
+                            倍率 $k$: <input type="range" id="scalar-k" min="-2" max="3" step="0.1" value="1.5" style="vertical-align: middle;">
+                            <span id="k-val" style="color: #e65100;">1.5</span>
+                        </div>
+                    </div>
+
+                    <div class="canvas-container">
+                        <div id="canvas-holder"></div>
+                        <div class="controls">
+                            <div class="info-panel">
+                                <h4>ベクトルデータ</h4>
+                                <div id="vec1-info" style="color:#e91e63;">F1: (0,0)</div>
+                                <div id="vec2-info" style="color:#2196f3;">F2: (0,0)</div>
+                                <div id="res-info" style="color:#4caf50; font-weight:bold; border-top: 1px solid #eee; padding-top:10px;">結果: (0,0)</div>
+                            </div>
+                            <p class="caption">
+                                ・矢印の先端（●）で向きと大きさを変更<br>
+                                ・矢印の根元（○）で力をかける位置を変更
+                            </p>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+    <script src="force_vector.js"></script>
+    <script src="../sidebar.js"></script>
+</body>
+</html>

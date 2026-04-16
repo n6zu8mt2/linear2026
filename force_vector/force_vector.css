@@ -1,0 +1,79 @@
+/* 説明ボックス */
+#explanation {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.equation-box {
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 5px;
+    border-left: 5px solid #0d47a1;
+    margin-top: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.equation-box ul {
+    margin-bottom: 0;
+}
+
+/* キャンバスエリア */
+.canvas-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 20px;
+    justify-content: center;
+}
+
+#canvas-holder {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.controls {
+    flex: 1;
+    min-width: 250px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.mode-select label, .scalar-control label {
+    font-weight: bold;
+    color: #0d47a1;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.mode-select select, .scalar-control input {
+    width: 100%;
+}
+
+.info-panel h4 {
+    margin-top: 0;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.info-panel div {
+    margin-bottom: 10px;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.caption {
+    font-size: 0.9em;
+    color: #666;
+    border-top: 1px dashed #ccc;
+    padding-top: 10px;
+    margin-top: auto; /* 一番下に配置 */
+}
