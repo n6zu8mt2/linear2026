@@ -7,7 +7,7 @@
 const state = {
     // 行列 A = [[a, b], [c, d]]
     a: 2, b: 1,
-    c: 0, d: 3,
+    c: 1, d: 3,
     
     // 入力ベクトル x = [vx, vy]
     vx: 1, vy: 1,
