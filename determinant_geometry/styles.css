@@ -1,0 +1,182 @@
+/* styles.css */
+
+.description {
+    background-color: #f8f9fa;
+    border-left: 5px solid #0d47a1;
+    padding: 20px;
+    border-radius: 4px;
+    margin-bottom: 30px;
+    line-height: 1.7;
+}
+
+.description h2 { margin-top: 0; color: #0d47a1; }
+
+.theory-card {
+    background-color: #fff;
+    padding: 20px;
+    border-left: 4px solid #1e88e5;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.theory-card h3 {
+    margin-top: 0;
+    color: #0d47a1;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 5px;
+}
+
+.theory-card h4 {
+    color: #2e7d32;
+    margin-top: 15px;
+    margin-bottom: 5px;
+}
+
+/* シミュレーターレイアウト */
+.mode-selector-container {
+    background-color: #f1f3f5;
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+}
+
+.mode-tab {
+    cursor: pointer;
+    font-size: 1.1em;
+}
+
+.simulator-layout {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.controls-panel {
+    flex: 1;
+    min-width: 280px;
+    background-color: #f4f6f9;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+}
+
+.controls-panel h3 {
+    margin-top: 0;
+    color: #333;
+    border-bottom: 2px solid #cfd8dc;
+    padding-bottom: 5px;
+}
+
+.panel-desc {
+    font-size: 0.85em;
+    color: #666;
+    margin-bottom: 15px;
+}
+
+/* 行列スタイルの入力ボックス */
+.matrix-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+.matrix-brackets {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 8px 12px;
+    border-left: 3px solid #333;
+    border-right: 3px solid #333;
+    border-radius: 8px;
+}
+
+.m-row {
+    display: flex;
+    gap: 10px;
+}
+
+.m-row input {
+    width: 60px;
+    padding: 6px;
+    text-align: center;
+    font-size: 1em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-family: monospace;
+}
+
+/* 3Dスライダーのスタイル */
+.slider-group {
+    background: #fff;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #e0e0e0;
+    margin-bottom: 15px;
+}
+
+.slider-group label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.vec-label-a { color: #e53935; }
+.vec-label-b { color: #1e88e5; }
+.vec-label-c { color: #8e24aa; }
+
+.slide-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.9em;
+    font-family: monospace;
+    margin-bottom: 30px;
+}
+.slide-row:last-child { margin-bottom: 0; }
+
+.slide-row input {
+    flex: 1;
+    cursor: pointer;
+}
+
+/* 可視化パネル */
+.visualization-panel {
+    flex: 2;
+    min-width: 350px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+#canvas-holder {
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    cursor: grab;
+}
+#canvas-holder:active { cursor: grabbing; }
+
+.result-display-box {
+    background-color: #efebe9;
+    border: 1px solid #d7ccc8;
+    padding: 15px;
+    border-radius: 8px;
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#result-formula-box {
+    width: 100%;
+    text-align: center;
+}

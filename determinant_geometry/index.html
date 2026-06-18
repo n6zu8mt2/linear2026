@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>行列式の幾何学的意味 | 物理数学シミュレーター</title>
+    <link rel="stylesheet" href="../common.css">
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        MathJax = {
+          tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] },
+          svg: { fontCache: 'global' }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.2/p5.min.js"></script>
+</head>
+<body>
+    <div class="page-wrapper">
+        <div id="sidebar-placeholder" data-root-path="../"></div>
+
+        <div class="main-content">
+            <div class="header">
+                <h1>行列式の幾何学的意味</h1>
+                <p>〜面積・体積と行列式を結ぶ美しい空間の性質〜</p>
+            </div>
+            
+            <div class="back-link">
+                <a href="../index.html">← トップページに戻る</a>
+            </div>
+
+            <div class="container">
+                <section class="description">
+                    <h2>📐 行列式とは「空間の大きさの倍率」である</h2>
+                    <p>
+                        線形代数における<strong>行列式（determinant）</strong>は、単なる複雑な計算式ではなく、非常に明快な幾何学的意味を持っています。それは、ベクトルが囲む空間の<strong>「面積（2次元）」や「体積（3次元）」</strong>そのものです。
+                    </p>
+
+                    <div class="theory-tabs">
+                        <div class="theory-card">
+                            <h3>【2次元】平行四辺日の面積と2次行列式</h3>
+                            <p>
+                                2つのベクトル $\boldsymbol{a} = \begin{pmatrix} a \\ c \end{pmatrix}, \boldsymbol{b} = \begin{pmatrix} b \\ d \end{pmatrix}$ が作る平行四辺形の面積 $S$ は、行列式 $\det \begin{pmatrix} a & b \\ c & d \end{pmatrix} = ad - bc$ の絶対値に一致します。
+                            </p>
+                            
+                            <h4>① $|\boldsymbol{a}||\boldsymbol{b}|\sin\theta$ を用いた三角関数による説明</h4>
+                            <p>
+                                2つのベクトルのなす角を $\theta$ とすると、平行四辺形の面積は $S = |\boldsymbol{a}||\boldsymbol{b}|\sin\theta$ です。 $\sin^2\theta + \cos^2\theta = 1$ より、次のように変形できます。
+                                $$ S = |\boldsymbol{a}||\boldsymbol{b}|\sqrt{1 - \cos^2\theta} = \sqrt{|\boldsymbol{a}|^2|\boldsymbol{b}|^2 - (|\boldsymbol{a}||\boldsymbol{b}|\cos\theta)^2} $$
+                                ここで、内積の定義 $\boldsymbol{a}\cdot\boldsymbol{b} = |\boldsymbol{a}||\boldsymbol{b}|\cos\theta$ を代入すると：
+                                $$ S = \sqrt{|\boldsymbol{a}|^2|\boldsymbol{b}|^2 - (\boldsymbol{a}\cdot\boldsymbol{b})^2} $$
+                                各成分を代入すると、 $|\boldsymbol{a}|^2 = a^2+c^2$, $|\boldsymbol{b}|^2 = b^2+d^2$, $\boldsymbol{a}\cdot\boldsymbol{b} = ab+cd$ となり、展開して整理すると美しい平方の形が現れます。
+                                $$ (a^2+c^2)(b^2+d^2) - (ab+cd)^2 = a^2d^2 - 2abcd + b^2c^2 = (ad - bc)^2 $$
+                                よって、 $S = \sqrt{(ad-bc)^2} = |ad - bc| = |\det A|$ が証明されます。
+                            </p>
+
+                            <h4>② 平行移動（等積変形）による説明</h4>
+                            <p>
+                                平行四辺形の1つの辺を固定し、もう1つの辺をその辺と平行な方向にスライド（平行移動）させても、底辺と高さが変わらないため<strong>面積は変化しません（等積変形）</strong>。<br>
+                                これは行列の列基本変形（片方の列に他方の列の実数倍を加える操作）に対応します。この操作を繰り返すことで、どんな傾いた平行四辺形も、軸に沿った「ただの長方形」に変形させることができ、その長方形の辺の長さから面積が $ad - bc$ となることが視覚的にも理解できます。
+                            </p>
+                        </div>
+
+                        <div class="theory-card" style="border-left-color: #673ab7; margin-top: 20px;">
+                            <h3>【3次元】平行六面体の体積と3次行列式</h3>
+                            <p>
+                                3つのベクトル $\boldsymbol{a}, \boldsymbol{b}, \boldsymbol{c}$ が作る平行六面体の体積 $V$ は、3次行列式の絶対値に一致します。
+                            </p>
+                            <h4>外積と内積の融合：スカラー三重積</h4>
+                            <p>
+                                2つのベクトル $\boldsymbol{a}, \boldsymbol{b}$ の<strong>外積 $\boldsymbol{a} \times \boldsymbol{b}$</strong> は、「底面となる平行四辺形の面積」を大きさに持ち、その底面に「垂直な方向」を向くベクトルです。<br>
+                                ここに第3のベクトル $\boldsymbol{c}$ との内積を取る操作、すなわち<strong>スカラー三重積 $(\boldsymbol{a} \times \boldsymbol{b}) \cdot \boldsymbol{c}$</strong> を考えると：
+                                $$ V = |(\boldsymbol{a} \times \boldsymbol{b}) \cdot \boldsymbol{c}| $$
+                                これは（外積の大きさ＝底面積） $\times$ （ $\boldsymbol{c}$ の垂直方向への射影＝高さ）となり、まさに平行六面体の体積そのものを表します。これが3次行列式の展開式と完全に一致します。
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="simulator-section">
+                    <h2>🎮 インタラクティブ・シミュレーター</h2>
+                    
+                    <div class="mode-selector-container">
+                        <label class="mode-tab"><input type="radio" name="dim-mode" value="2d" checked> 2D：平行四辺形の面積</label>
+                        <label class="mode-tab" style="margin-left: 20px;"><input type="radio" name="dim-mode" value="3d"> 3D：平行六面体の体積</label>
+                    </div>
+
+                    <div class="simulator-layout">
+                        <div class="controls-panel">
+                            <div id="controls-2d" class="sub-panel">
+                                <h3>ベクトル操作 (2D)</h3>
+                                <p class="panel-desc">画面上の矢印の先端（●）を直接ドラッグして動かすこともできます。</p>
+                                <div class="matrix-box">
+                                    <span>$A = \begin{pmatrix} a & b \\ c & d \end{pmatrix} = $</span>
+                                    <div class="matrix-brackets">
+                                        <div class="m-row">
+                                            <input type="number" id="input-2d-a" value="3" step="0.5">
+                                            <input type="number" id="input-2d-b" value="1" step="0.5">
+                                        </div>
+                                        <div class="m-row">
+                                            <input type="number" id="input-2d-c" value="1" step="0.5">
+                                            <input type="number" id="input-2d-d" value="2" step="0.5">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="helper-options" style="margin-top: 20px;">
+                                    <label><input type="checkbox" id="check-shear"> 等積変形（長方形への平行移動）を表示</label>
+                                </div>
+                            </div>
+
+                            <div id="controls-3d" class="sub-panel" style="display: none;">
+                                <h3>ベクトル操作 (3D)</h3>
+                                <p class="panel-desc">スライダーで各成分を動かしてください。グラフエリアをドラッグすると視点を回転できます。</p>
+                                
+                                <div class="slider-group">
+                                    <label class="vec-label-a">ベクトル $\boldsymbol{a}$ (赤)</label>
+                                    <div class="slide-row">X: <input type="range" id="s-ax" min="-4" max="4" step="0.1" value="3"></div>
+                                    <div class="slide-row">Y: <input type="range" id="s-ay" min="-4" max="4" step="0.1" value="0.5"></div>
+                                    <div class="slide-row">Z: <input type="range" id="s-az" min="-4" max="4" step="0.1" value="0.5"></div>
+                                </div>
+
+                                <div class="slider-group">
+                                    <label class="vec-label-b">ベクトル $\boldsymbol{b}$ (青)</label>
+                                    <div class="slide-row">X: <input type="range" id="s-bx" min="-4" max="4" step="0.1" value="1"></div>
+                                    <div class="slide-row">Y: <input type="range" id="s-by" min="-4" max="4" step="0.1" value="3"></div>
+                                    <div class="slide-row">Z: <input type="range" id="s-bz" min="-4" max="4" step="0.1" value="0.5"></div>
+                                </div>
+
+                                <div class="slider-group">
+                                    <label class="vec-label-c">ベクトル $\boldsymbol{c}$ (紫)</label>
+                                    <div class="slide-row">X: <input type="range" id="s-cx" min="-4" max="4" step="0.1" value="0.5"></div>
+                                    <div class="slide-row">Y: <input type="range" id="s-cy" min="-4" max="4" step="0.1" value="1"></div>
+                                    <div class="slide-row">Z: <input type="range" id="s-cz" min="-4" max="4" step="0.1" value="3.5"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="visualization-panel">
+                            <div id="canvas-holder"></div>
+                            
+                            <div class="result-display-box">
+                                <div id="result-formula-box">
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+    <script src="../sidebar.js"></script>
+</body>
+</html>
