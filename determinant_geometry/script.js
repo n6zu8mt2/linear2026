@@ -16,9 +16,9 @@ const state = {
     b3d: { x: 1, y: 3, z: 0.5 },
     c3d: { x: 0.5, y: 1, z: 3.5 },
 
-    // 3D視点回転
-    rotX: -0.5,
-    rotY: -0.5,
+    // 3D視点回転 (右手系に対応した仰角と方位角)
+    rotX: Math.PI / 6,   // 仰角 (約30度)
+    rotY: -Math.PI / 6,  // 方位角 (約-30度)
     zoom: 1.0
 };
 
@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
         cx: document.getElementById('s-cx'), cy: document.getElementById('s-cy'), cz: document.getElementById('s-cz')
     };
 
-    // ディメンションモード切り替え（※ここでエラーが起きていました）
+    // ディメンションモード切り替え
     const radios = document.querySelectorAll('input[name="dim-mode"]');
     radios.forEach(r => {
         r.addEventListener('change', (e) => {
@@ -166,9 +166,8 @@ const sketch = (p) => {
 
         // 平行移動（等積変形）の可視化
         if (state.showShear && state.a2d.y !== 0) {
-            // b' = b - t*a を施して長方形に変形していく補助線
             let t = state.b2d.y / state.a2d.y;
-            let bShear = p.createVector((state.b2d.x - t * state.a2d.x) * GRID_SIZE, 0); // y成分を0にスライド
+            let bShear = p.createVector((state.b2d.x - t * state.a2d.x) * GRID_SIZE, 0);
             let sumShear = p5.Vector.add(a, bShear);
 
             p.fill(244, 67, 54, 30); p.stroke(244, 67, 54, 100); p.strokeWeight(1);
@@ -210,16 +209,18 @@ const sketch = (p) => {
         p.stroke(180); p.line(-p.width/2, 0, p.width/2, 0); p.line(0, -p.height/2, 0, p.height/2);
     }
 
-    // --- 3D投影描画ロジック (自前行列投影) ---
+    // --- 3D投影描画ロジック (右手系対応) ---
     function draw3D() {
         // 軸の描画
         let orig = project3D(0, 0, 0);
         let axX = project3D(5, 0, 0); let axY = project3D(0, 5, 0); let axZ = project3D(0, 0, 5);
         
         p.stroke(200); p.strokeWeight(1);
-        p.line(orig.x, orig.y, axX.x, axX.y); p.text("+X", axX.x+5, axX.y);
-        p.line(orig.x, orig.y, axY.x, axY.y); p.text("+Y", axY.x+5, axY.y);
-        p.line(orig.x, orig.y, axZ.x, axZ.y); p.text("+Z", axZ.x+5, axZ.y);
+        p.line(orig.x, orig.y, axX.x, axX.y); p.noStroke(); p.fill(150); p.text("+X", axX.x+5, axX.y);
+        p.stroke(200); p.strokeWeight(1);
+        p.line(orig.x, orig.y, axY.x, axY.y); p.noStroke(); p.fill(150); p.text("+Y", axY.x+5, axY.y);
+        p.stroke(200); p.strokeWeight(1);
+        p.line(orig.x, orig.y, axZ.x, axZ.y); p.noStroke(); p.fill(150); p.text("+Z", axZ.x+5, axZ.y);
 
         // 3Dベクトルの実データ
         let a = state.a3d; let b = state.b3d; let c = state.c3d;
@@ -261,19 +262,23 @@ const sketch = (p) => {
         p.quad(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y, p4.x, p4.y);
     }
 
+    // 数学的右手系（Z軸上向き）の投影ロジック
     function project3D(x, y, z) {
-        // 3D回転行列の適用
-        let cx = Math.cos(state.rotX); let sx = Math.sin(state.rotX);
-        let cy = Math.cos(state.rotY); let sy = Math.sin(state.rotY);
+        // 1. Z軸周りの回転 (方位角 rotY)
+        let cth = Math.cos(state.rotY); let sth = Math.sin(state.rotY);
+        let x1 = x * cth - y * sth;
+        let y1 = x * sth + y * cth;
+        let z1 = z;
 
-        // Y軸回転
-        let x1 = x * cx - z * sx;
-        let z1 = x * sx + z * cx;
-        // X軸回転
-        let y2 = y * cy - z1 * sy;
+        // 2. 画面のX軸周りの回転 (仰角 rotX)
+        let cph = Math.cos(state.rotX); let sph = Math.sin(state.rotX);
+        let x2 = x1;
+        let y2 = y1 * cph - z1 * sph;
+        let z2 = y1 * sph + z1 * cph;
         
         let s = GRID_SIZE * state.zoom;
-        return { x: x1 * s, y: -y2 * s };
+        // p5.jsではY軸下向きがプラスなので、数学的なZ方向(z2)を上(-y)にする
+        return { x: x2 * s, y: -z2 * s };
     }
 
     // 共通矢印関数
@@ -340,8 +345,13 @@ const sketch = (p) => {
         } else if (dragTarget === 'rotate') {
             let dx = p.mouseX - dragStart.x;
             let dy = p.mouseY - dragStart.y;
-            state.rotX += dx * 0.01;
-            state.rotY += dy * 0.01;
+            
+            // 右手系に合わせた回転ロジック
+            state.rotY += dx * 0.01;
+            state.rotX -= dy * 0.01;
+            // 仰角は真上や真下を越えないように制限
+            state.rotX = Math.max(-Math.PI/2, Math.min(Math.PI/2, state.rotX));
+            
             dragStart.x = p.mouseX;
             dragStart.y = p.mouseY;
         }
