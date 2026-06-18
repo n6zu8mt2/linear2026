@@ -38,7 +38,7 @@
 
                     <div class="theory-tabs">
                         <div class="theory-card">
-                            <h3>【2次元】平行四辺日の面積と2次行列式</h3>
+                            <h3>【2次元】平行四辺形の面積と2次行列式</h3>
                             <p>
                                 2つのベクトル $\boldsymbol{a} = \begin{pmatrix} a \\ c \end{pmatrix}, \boldsymbol{b} = \begin{pmatrix} b \\ d \end{pmatrix}$ が作る平行四辺形の面積 $S$ は、行列式 $\det \begin{pmatrix} a & b \\ c & d \end{pmatrix} = ad - bc$ の絶対値に一致します。
                             </p>
@@ -56,8 +56,13 @@
 
                             <h4>② 平行移動（等積変形）による説明</h4>
                             <p>
-                                平行四辺形の1つの辺を固定し、もう1つの辺をその辺と平行な方向にスライド（平行移動）させても、底辺と高さが変わらないため<strong>面積は変化しません（等積変形）</strong>。<br>
-                                これは行列の列基本変形（片方の列に他方の列の実数倍を加える操作）に対応します。この操作を繰り返すことで、どんな傾いた平行四辺形も、軸に沿った「ただの長方形」に変形させることができ、その長方形の辺の長さから面積が $ad - bc$ となることが視覚的にも理解できます。
+                                平行四辺形の1つの辺を固定し、もう1つの辺をその辺と平行な方向にスライド（平行移動）させても、底辺と高さが変わらないため<strong>面積は変化しません（等積変形）</strong>。
+                            </p>
+                            <p>
+                                下のシミュレーターで「等積変形を表示」にチェックを入れると、ベクトル $\boldsymbol{b}$ を $\boldsymbol{a}$ に平行な方向にスライドさせ、$\boldsymbol{b}$ の $y$ 成分を $0$ にする（$x$ 軸上に乗せる）変形が行われます。この新しいベクトルを $\boldsymbol{b}'$ とすると、その $x$ 成分は $b - a\frac{d}{c}$ となります。<br>
+                                変形後の平行四辺形は、底辺の長さが $\left|b - a\frac{d}{c}\right|$ 、高さが $\boldsymbol{a}$ の $y$ 成分である $|c|$ となるため、面積は以下のように計算できます。
+                                $$ \text{底辺} \times \text{高さ} = \left|b - a\frac{d}{c}\right| \times |c| = |bc - ad| = |ad - bc| $$
+                                このように、図形を平行移動させて単純な長方形ベースの面積計算に持ち込むことで、面積が $ad - bc$ となることが直感的に理解できます。
                             </p>
                         </div>
 
@@ -71,7 +76,8 @@
                                 2つのベクトル $\boldsymbol{a}, \boldsymbol{b}$ の<strong>外積 $\boldsymbol{a} \times \boldsymbol{b}$</strong> は、「底面となる平行四辺形の面積」を大きさに持ち、その底面に「垂直な方向」を向くベクトルです。<br>
                                 ここに第3のベクトル $\boldsymbol{c}$ との内積を取る操作、すなわち<strong>スカラー三重積 $(\boldsymbol{a} \times \boldsymbol{b}) \cdot \boldsymbol{c}$</strong> を考えると：
                                 $$ V = |(\boldsymbol{a} \times \boldsymbol{b}) \cdot \boldsymbol{c}| $$
-                                これは（外積の大きさ＝底面積） $\times$ （ $\boldsymbol{c}$ の垂直方向への射影＝高さ）となり、まさに平行六面体の体積そのものを表します。これが3次行列式の展開式と完全に一致します。
+                                これは<strong>（外積の大きさ＝底面積） $\times$ （ $\boldsymbol{c}$ の法線方向への射影＝高さ）</strong>となり、まさに平行六面体の体積そのものを表します。これが3次行列式の展開式と完全に一致します。<br>
+                                下のシミュレーターで「外積（法線）と高さを表示」にチェックを入れて、底面に垂直なベクトルと高さ成分の関係を確認してみてください。
                             </p>
                         </div>
                     </div>
@@ -104,7 +110,7 @@
                                     </div>
                                 </div>
                                 <div class="helper-options" style="margin-top: 20px;">
-                                    <label><input type="checkbox" id="check-shear"> 等積変形（長方形への平行移動）を表示</label>
+                                    <label><input type="checkbox" id="check-shear"> 等積変形（x軸への平行移動）を表示</label>
                                 </div>
                             </div>
 
@@ -131,6 +137,10 @@
                                     <div class="slide-row">X: <input type="range" id="s-cx" min="-4" max="4" step="0.1" value="0.5"></div>
                                     <div class="slide-row">Y: <input type="range" id="s-cy" min="-4" max="4" step="0.1" value="1"></div>
                                     <div class="slide-row">Z: <input type="range" id="s-cz" min="-4" max="4" step="0.1" value="3.5"></div>
+                                </div>
+
+                                <div class="helper-options" style="margin-top: 15px;">
+                                    <label><input type="checkbox" id="check-cross"> 外積（法線）と高さの射影を表示</label>
                                 </div>
                             </div>
                         </div>

@@ -135,19 +135,24 @@
     gap: 10px;
     font-size: 0.9em;
     font-family: monospace;
-    margin-bottom: 30px;
+    margin-bottom: 5px;
 }
-.slide-row:last-child { margin-bottom: 0; }
 
 .slide-row input {
     flex: 1;
     cursor: pointer;
 }
 
+.helper-options label {
+    cursor: pointer;
+    font-weight: bold;
+    color: #f57c00;
+}
+
 /* 可視化パネル */
 .visualization-panel {
     flex: 2;
-    min-width: 350px;
+    min-width: 450px;
     display: flex;
     flex-direction: column;
     gap: 15px;
@@ -168,7 +173,7 @@
 .result-display-box {
     background-color: #efebe9;
     border: 1px solid #d7ccc8;
-    padding: 15px;
+    padding: 20px;
     border-radius: 8px;
     min-height: 80px;
     display: flex;
@@ -178,5 +183,5 @@
 
 #result-formula-box {
     width: 100%;
-    text-align: center;
+    text-align: left; /* 改行を見やすくするため左揃えをベースに */
 }
